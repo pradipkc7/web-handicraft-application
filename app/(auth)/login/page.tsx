@@ -6,10 +6,11 @@ export default function LoginPage() {
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.2fr_0.8fr]">
         <div className="relative min-h-[420px] md:min-h-screen">
           <img
-            src="https://2025.vietnam.travel/wp-content/uploads/2025/05/16.5.thailan1.jpg"
+            src="/assets/images/login.png"
             alt="Handicraft workspace"
             className="absolute inset-0 h-full w-full object-cover"
-          />
+          ></img>
+
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative flex h-full items-end p-8 text-white lg:p-12">
             <div className="max-w-sm space-y-6">

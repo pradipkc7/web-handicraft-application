@@ -14,48 +14,99 @@ export default function SignupFormZod() {
     defaultValues: {
       fullname: "",
       email: "default@gmail.com",
+      dateOfBirth: "",
       password: "",
       confirmPassword: "",
     },
   });
 
   const onSubmit = (data: RegisterFormData) => {
-    alert(`Submitted data: ${data.fullname}, ${data.email}, ${data.password}`);
+    alert(
+      `Submitted data: ${data.fullname}, ${data.email}, ${data.dateOfBirth}, ${data.password}`,
+    );
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Fullname :</label>
-          <input type="text" {...register("fullname")} />
-          {errors.fullname && <span>{errors.fullname.message}</span>}
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Full name
+        </label>
+        <input
+          type="text"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("fullname")}
+        />
+        {errors.fullname && (
+          <p className="text-sm text-red-600">{errors.fullname.message}</p>
+        )}
+      </div>
 
-        <div>
-          <label>Email :</label>
-          <input type="email" {...register("email")} />
-          {errors.email && <span>{errors.email.message}</span>}
-        </div>
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Email address
+        </label>
+        <input
+          type="email"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("email")}
+        />
+        {errors.email && (
+          <p className="text-sm text-red-600">{errors.email.message}</p>
+        )}
+      </div>
 
-        <div>
-          <label>Password :</label>
-          <input type="password" {...register("password")} />
-          {errors.password && <span>{errors.password.message}</span>}
-        </div>
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Date of birth
+        </label>
+        <input
+          type="date"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("dateOfBirth")}
+        />
+        {errors.dateOfBirth && (
+          <p className="text-sm text-red-600">{errors.dateOfBirth.message}</p>
+        )}
+      </div>
 
-        <div>
-          <label>Confirm Password :</label>
-          <input type="password" {...register("confirmPassword")} />
-          {errors.confirmPassword && (
-            <span>{errors.confirmPassword.message}</span>
-          )}
-        </div>
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Password
+        </label>
+        <input
+          type="password"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("password")}
+        />
+        {errors.password && (
+          <p className="text-sm text-red-600">{errors.password.message}</p>
+        )}
+      </div>
 
-        <button type="submit" disabled={isSubmitting}>
-          Register
-        </button>
-      </form>
-    </div>
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Confirm password
+        </label>
+        <input
+          type="password"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("confirmPassword")}
+        />
+        {errors.confirmPassword && (
+          <p className="text-sm text-red-600">
+            {errors.confirmPassword.message}
+          </p>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full rounded-3xl bg-amber-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        Signup
+      </button>
+    </form>
   );
 }
