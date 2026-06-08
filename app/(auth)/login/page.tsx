@@ -4,7 +4,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-zinc-100">
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.2fr_0.8fr]">
-        <div className="relative min-h-[420px] md:min-h-screen">
+        <div className="relative min-h-105 md:min-h-screen">
           <img
             src="/assets/images/login.png"
             alt="Handicraft workspace"
@@ -27,7 +27,7 @@ export default function LoginPage() {
         </div>
 
         <div className="flex min-h-screen items-center justify-center px-6 py-12">
-          <div className="w-full max-w-xl rounded-[32px] border border-zinc-200 bg-white p-10 shadow-[0_30px_80px_rgba(15,23,42,0.08)]">
+          <div className="w-full max-w-xl rounded-4xl border border-zinc-200 bg-white p-10 shadow-[0_30px_80px_rgba(15,23,42,0.08)]">
             <div className="mb-10 space-y-3">
               <p className="text-sm uppercase tracking-[0.35em] text-amber-900">
                 Welcome Back
