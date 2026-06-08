@@ -6,17 +6,17 @@ export default function SignupPage() {
     <main className="min-h-screen bg-zinc-100">
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.25fr_0.75fr]">
         <div className="relative min-h-[420px] md:min-h-screen">
-          {/* <img
-            // src="https://2025.vietnam.travel/wp-content/uploads/2025/05/16.5.thailan1.jpg"
+          <img
+            src="https://images.unsplash.com/photo-1522065893269-6fd20f6d7438?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Handicraft workspace"
             className="absolute inset-0 h-full w-full object-cover"
-          /> */}
+          />
 
-          <img
+          {/* <img
             src="/assets/images/signup.png"
             alt="Handicraft workspace"
             className="absolute inset-0 h-full w-full object-cover"
-          ></img>
+          ></img> */}
 
           <div className="absolute inset-0 bg-black/35" />
           <div className="relative flex h-full items-end p-8 text-white lg:p-12">

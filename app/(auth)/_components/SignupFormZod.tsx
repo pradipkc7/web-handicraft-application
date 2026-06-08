@@ -12,17 +12,19 @@ export default function SignupFormZod() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullname: "",
-      email: "default@gmail.com",
-      dateOfBirth: "",
+      firstName: "",
+      lastName: "",
+      gender: undefined,
+      phoneNumber: "",
+      username: "",
+      email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
   const onSubmit = (data: RegisterFormData) => {
     alert(
-      `Submitted data: ${data.fullname}, ${data.email}, ${data.dateOfBirth}, ${data.password}`,
+      `Submitted data: ${data.firstName} ${data.lastName}, Username: ${data.username}, Email: ${data.email}, Gender: ${data.gender}, Phone: ${data.phoneNumber}`,
     );
   };
 
@@ -30,15 +32,75 @@ export default function SignupFormZod() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-3">
         <label className="block text-sm font-medium text-zinc-700">
-          Full name
+          First name
         </label>
         <input
           type="text"
           className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
-          {...register("fullname")}
+          {...register("firstName")}
         />
-        {errors.fullname && (
-          <p className="text-sm text-red-600">{errors.fullname.message}</p>
+        {errors.firstName && (
+          <p className="text-sm text-red-600">{errors.firstName.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Last name
+        </label>
+        <input
+          type="text"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("lastName")}
+        />
+        {errors.lastName && (
+          <p className="text-sm text-red-600">{errors.lastName.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Phone number
+        </label>
+        <input
+          type="tel"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("phoneNumber")}
+        />
+        {errors.phoneNumber && (
+          <p className="text-sm text-red-600">{errors.phoneNumber.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Gender
+        </label>
+        <select
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("gender")}
+        >
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        {errors.gender && (
+          <p className="text-sm text-red-600">{errors.gender.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-zinc-700">
+          Username
+        </label>
+        <input
+          type="text"
+          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
+          {...register("username")}
+        />
+        {errors.username && (
+          <p className="text-sm text-red-600">{errors.username.message}</p>
         )}
       </div>
 
@@ -58,20 +120,6 @@ export default function SignupFormZod() {
 
       <div className="space-y-3">
         <label className="block text-sm font-medium text-zinc-700">
-          Date of birth
-        </label>
-        <input
-          type="date"
-          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
-          {...register("dateOfBirth")}
-        />
-        {errors.dateOfBirth && (
-          <p className="text-sm text-red-600">{errors.dateOfBirth.message}</p>
-        )}
-      </div>
-
-      <div className="space-y-3">
-        <label className="block text-sm font-medium text-zinc-700">
           Password
         </label>
         <input
@@ -81,22 +129,6 @@ export default function SignupFormZod() {
         />
         {errors.password && (
           <p className="text-sm text-red-600">{errors.password.message}</p>
-        )}
-      </div>
-
-      <div className="space-y-3">
-        <label className="block text-sm font-medium text-zinc-700">
-          Confirm password
-        </label>
-        <input
-          type="password"
-          className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
-          {...register("confirmPassword")}
-        />
-        {errors.confirmPassword && (
-          <p className="text-sm text-red-600">
-            {errors.confirmPassword.message}
-          </p>
         )}
       </div>
 
