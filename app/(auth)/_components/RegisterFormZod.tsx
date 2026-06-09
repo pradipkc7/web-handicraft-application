@@ -19,6 +19,15 @@ export default function RegisterFormZod({ action }: RegisterFormZod) {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      gender: undefined,
+      phoneNumber: "",
+      username: "",
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
