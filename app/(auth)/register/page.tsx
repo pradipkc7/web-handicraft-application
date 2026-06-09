@@ -1,7 +1,7 @@
-import SignupFormZod from "../_components/RegisterFormZod";
-import Image from "next/image";
+import { handleRegisterUser } from "@/lib/actions/auth-action";
+import RegisterFormZod from "../_components/RegisterFormZod";
 
-export default function SignupPage() {
+export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-zinc-100">
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.25fr_0.75fr]">
@@ -13,7 +13,7 @@ export default function SignupPage() {
           />
 
           {/* <img
-            src="/assets/images/signup.png"
+            src="/assets/images/register.png"
             alt="Handicraft workspace"
             className="absolute inset-0 h-full w-full object-cover"
           ></img> */}
@@ -54,7 +54,7 @@ export default function SignupPage() {
               </p>
             </div>
 
-            <SignupFormZod />
+            <RegisterFormZod action={handleRegisterUser} />
 
             <div className="mt-8 text-center text-sm text-zinc-500">
               Already a member?{" "}

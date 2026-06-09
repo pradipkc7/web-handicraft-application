@@ -1,31 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormData, registerSchema } from "./schema";
 
-export default function SignupFormZod() {
+interface RegisterFormZod {
+  action: (
+    data: RegisterFormData,
+  ) => Promise<{ success: boolean; message: string }>;
+}
+
+export default function RegisterFormZod({ action }: RegisterFormZod) {
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      gender: undefined,
-      phoneNumber: "",
-      username: "",
-      email: "",
-      password: "",
-    },
   });
 
-  const onSubmit = (data: RegisterFormData) => {
-    alert(
-      `Submitted data: ${data.firstName} ${data.lastName}, Username: ${data.username}, Email: ${data.email}, Gender: ${data.gender}, Phone: ${data.phoneNumber}`,
-    );
+  const onSubmit = async (data: RegisterFormData) => {
+    const result = await action(data);
+    if (result.success) {
+      setSubmissionError(null);
+      alert("Registration successful");
+    } else {
+      setSubmissionError(result.message);
+    }
   };
 
   return (
@@ -137,8 +140,11 @@ export default function SignupFormZod() {
         disabled={isSubmitting}
         className="w-full rounded-3xl bg-amber-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Signup
+        Register HandiCraft
       </button>
+      {submissionError ? (
+        <p className="mt-4 text-sm text-red-600">{submissionError}</p>
+      ) : null}
     </form>
   );
 }

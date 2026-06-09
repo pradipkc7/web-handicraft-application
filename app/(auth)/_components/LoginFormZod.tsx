@@ -1,9 +1,58 @@
+// "use client";
+// import { useState } from "react";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { LoginFormData, loginSchema } from "./schema";
+
+// interface LoginFormZodProps {
+//   action: (
+//     data: LoginFormData,
+//   ) => Promise<{ success: boolean; message: string }>;
+// }
+
+// export default function LoginFormZod({ action }: LoginFormZodProps) {
+//   const [submissionError, setSubmissionError] = useState<string | null>(null);
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors, isSubmitting },
+//   } = useForm<LoginFormData>({
+//     resolver: zodResolver(loginSchema),
+//     defaultValues: {
+//       email: "",
+//       password: "",
+//     },
+//   });
+
+//   const onSubmit = async (data: LoginFormData) => {
+//     const result = await action(data);
+//     if (result.success) {
+//       setSubmissionError(null);
+//       alert("Login successful");
+//     } else {
+//       setSubmissionError(result.message);
+//     }
+//   };
 "use client";
+
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { LoginFormData, loginSchema } from "./schema";
+import { useAuth } from "@/lib/contexts/AuthContexts";
 
-export default function LoginFormZod() {
+interface LoginFormZodProps {
+  action: (
+    data: LoginFormData,
+  ) => Promise<{ success: boolean; message?: string | null; data?: unknown }>;
+}
+
+export default function LoginFormZod({ action }: LoginFormZodProps) {
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const router = useRouter();
+  const { checkAuth } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -16,8 +65,21 @@ export default function LoginFormZod() {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    alert("Submitted data: " + data.email + ", " + data.password);
+  const onSubmit = async (data: LoginFormData) => {
+    setSubmissionError(null);
+
+    try {
+      const result = await action(data);
+      if (result.success) {
+        await checkAuth();
+        router.push("/dashboard");
+      } else {
+        setSubmissionError(result.message || "Login failed");
+      }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Login failed";
+      setSubmissionError(message);
+    }
   };
 
   return (
@@ -29,7 +91,7 @@ export default function LoginFormZod() {
         <input
           type="email"
           className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
-          {...register("email", { required: "Email is required" })}
+          {...register("email")}
         />
         {errors.email && (
           <p className="text-sm text-red-600">{errors.email.message}</p>
@@ -43,7 +105,7 @@ export default function LoginFormZod() {
         <input
           type="password"
           className="w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-amber-900 focus:ring-2 focus:ring-amber-100"
-          {...register("password", { required: "Password is required" })}
+          {...register("password")}
         />
         {errors.password && (
           <p className="text-sm text-red-600">{errors.password.message}</p>
@@ -70,6 +132,9 @@ export default function LoginFormZod() {
       >
         Enter HandiCraft
       </button>
+      {submissionError ? (
+        <p className="mt-4 text-sm text-red-600">{submissionError}</p>
+      ) : null}
     </form>
   );
 }
