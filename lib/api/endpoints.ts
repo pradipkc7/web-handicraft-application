@@ -1,13 +1,9 @@
 export const API = {
   AUTH: {
-    REGISTER: "/api/v1/auth/register",
-    LOGIN: "/api/v1/auth/login",
+    REGISTER: "/api/v1/users/register",
+    LOGIN: "/api/v1/users/login",
+    WHOAMI: "/api/v1/users/whoami",
+    UPDATE: "/api/v1/users/update",
+    CHANGE_PASSWORD: "/api/v1/users/change-password",
   },
 };
-
-// export const API = {
-//   AUTH: {
-//     REGISTER: "/api/users/register",
-//     LOGIN: "/api/users/login",
-//   },
-// };

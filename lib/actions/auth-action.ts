@@ -1,11 +1,23 @@
 "use server"; // server side api call
-import { register, login } from "@/lib/api/auth";
+import {
+  register,
+  login,
+  updatePassword,
+  updateProfile,
+  whoami,
+} from "@/lib/api/auth";
 
 import {
   LoginFormData,
   RegisterFormData,
 } from "@/app/(auth)/_components/schema";
-import { setTokenCookie, storeUserData } from "@/lib/cookies";
+import { clearAuthCookies, setTokenCookie, storeUserData } from "@/lib/cookies";
+import { revalidatePath } from "next/cache";
+import { redirect, RedirectType } from "next/navigation";
+import { UpdatePasswordFormData } from "@/app/dashboard/_components/schema";
+
+const getActionErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
 
 export const handleRegisterUser = async (data: RegisterFormData) => {
   try {
@@ -19,11 +31,11 @@ export const handleRegisterUser = async (data: RegisterFormData) => {
         message: result.message || "Registration failed",
       };
     }
-  } catch (error: Error | any) {
+  } catch (error: unknown) {
     console.error("Register action error:", error);
     return {
       success: false,
-      message: error?.message || "Registration failed",
+      message: getActionErrorMessage(error, "Registration failed"),
     };
   }
 };
@@ -42,8 +54,79 @@ export const handleLoginUser = async (data: LoginFormData) => {
     } else {
       return { success: false, message: result.message || "Login failed" };
     }
-  } catch (error: Error | any) {
+  } catch (error: unknown) {
     console.error("Login action error:", error);
-    return { success: false, message: error?.message || "Login failed" };
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Login failed"),
+    };
   }
+};
+export const handleUserDetails = async () => {
+  try {
+    const result = await whoami();
+    if (result.success) {
+      return { success: true, message: result.message, data: result.data };
+    } else {
+      return {
+        success: false,
+        message: result.message || "Failed to fetch user details",
+      };
+    }
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Failed to fetch user details"),
+    };
+  }
+};
+
+export const handleUpdateProfile = async (formData: FormData) => {
+  try {
+    const result = await updateProfile(formData);
+    if (result.success) {
+      const updatedUser = result.data?.user || result.data;
+      if (updatedUser) {
+        await storeUserData(updatedUser);
+      }
+      await revalidatePath("/dashboard/profile"); // Revalidate the profile page after successful update
+      return { success: true, message: result.message, data: result.data };
+    } else {
+      return {
+        success: false,
+        message: result.message || "Failed to update profile",
+      };
+    }
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Failed to update profile"),
+    };
+  }
+};
+
+export const handleUpdatePassword = async (data: UpdatePasswordFormData) => {
+  try {
+    const result = await updatePassword(data);
+    if (result.success) {
+      return { success: true, message: result.message, data: result.data };
+    } else {
+      return {
+        success: false,
+        message: result.message || "Failed to update password",
+      };
+    }
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Failed to update password"),
+    };
+  }
+};
+
+export const handleLogout = async () => {
+  // Clear cookies or tokens here
+  // donot use try/catch, redirect is treated as an exception in nextjs server component
+  await clearAuthCookies();
+  redirect("/login", RedirectType.replace);
 };
