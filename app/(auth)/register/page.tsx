@@ -1,14 +1,18 @@
 import { handleRegisterUser } from "@/lib/actions/auth-action";
 import RegisterFormZod from "../_components/RegisterFormZod";
+import Image from "next/image";
 
 export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-zinc-100">
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.25fr_0.75fr]">
         <div className="relative min-h-105 md:min-h-screen">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1522065893269-6fd20f6d7438?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Handicraft workspace"
+            fill
+            priority
+            sizes="(min-width: 768px) 62vw, 100vw"
             className="absolute inset-0 h-full w-full object-cover"
           />
 
@@ -28,11 +32,11 @@ export default function RegisterPage() {
                 The journey to your perfect fit starts here.
               </h2>
               <p className="max-w-xl text-sm leading-7 text-zinc-200">
-                Join a community of artisans dedicated to the art of slow
-                fashion and precision tailoring.
+                Join a community of users dedicated to handmade craft,
+                thoughtful design, and meaningful products.
               </p>
               <blockquote className="border-l-4 border-amber-300 pl-5 text-sm italic text-zinc-100">
-                “Crafting is more than a hobby; it's a conversation with the
+                “Crafting is more than a hobby; it&apos;s a conversation with the
                 material.”
               </blockquote>
             </div>

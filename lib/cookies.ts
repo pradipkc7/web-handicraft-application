@@ -2,6 +2,9 @@
 
 import { cookies } from "next/headers";
 
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : "Cookie operation failed";
+
 export const setTokenCookie = async (token: string) => {
   try {
     const cookieStore = await cookies();
@@ -13,13 +16,13 @@ export const setTokenCookie = async (token: string) => {
       path: "/",
     });
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error setting token cookie:", error);
-    return { success: false, message: error?.message };
+    return { success: false, message: getErrorMessage(error) };
   }
 };
 
-export const storeUserData = async (user: any) => {
+export const storeUserData = async (user: unknown) => {
   try {
     const cookieStore = await cookies();
     cookieStore.set("userData", JSON.stringify(user), {
@@ -30,9 +33,9 @@ export const storeUserData = async (user: any) => {
       path: "/",
     });
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error storing user data:", error);
-    return { success: false, message: error?.message };
+    return { success: false, message: getErrorMessage(error) };
   }
 };
 
@@ -41,7 +44,7 @@ export const getTokenCookie = async () => {
     const cookieStore = await cookies();
     const token = cookieStore.get("authToken");
     return token?.value || null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error getting token cookie:", error);
     return null;
   }
@@ -52,7 +55,7 @@ export const getUserData = async () => {
     const cookieStore = await cookies();
     const userData = cookieStore.get("userData");
     return userData?.value ? JSON.parse(userData.value) : null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error getting user data:", error);
     return null;
   }
@@ -69,8 +72,8 @@ export const clearAuthCookies = async () => {
     cookieStore.delete("authToken");
     cookieStore.delete("userData");
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error clearing auth cookies:", error);
-    return { success: false, message: error?.message };
+    return { success: false, message: getErrorMessage(error) };
   }
 };

@@ -1,14 +1,18 @@
 import LoginFormZod from "../_components/LoginFormZod";
 import { handleLoginUser } from "@/lib/actions/auth-action";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
     <main className="min-h-screen bg-zinc-100">
       <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 md:grid-cols-[1.2fr_0.8fr]">
         <div className="relative min-h-105 md:min-h-screen">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1522065893269-6fd20f6d7438?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Handicraft workspace"
+            fill
+            priority
+            sizes="(min-width: 768px) 60vw, 100vw"
             className="absolute inset-0 h-full w-full object-cover"
           />
           {/* <img

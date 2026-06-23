@@ -1,49 +1,98 @@
-// "use client";
+"use client";
 import {
   createContext,
   useContext,
   useState,
   ReactNode,
   useEffect,
+  useCallback,
 } from "react";
-import {
-  clearAuthCookies,
-  getTokenCookie,
-  getUserInfoCookie,
-} from "../cookies";
+import { clearAuthCookies, getTokenCookie, getUserData } from "../cookies";
 import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
+
+type AuthUser = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  username?: string;
+  phoneNumber?: string;
+  gender?: string;
+  profileImage?: string;
+  profileImageUrl?: string;
+  imageUrl?: string;
+  image?: string;
+} | null;
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: (value: boolean) => void;
-  user: any;
-  setUser: (user: any) => void;
+  user: AuthUser;
+  setUser: (user: AuthUser) => void;
   logout: () => Promise<void>;
   loading: boolean;
   checkAuth: () => Promise<void>;
 }
-
-// 1. Initial/Default state object banayeko
-const defaultAuth: AuthContextProps = {
-  isAuthenticated: false,
-  setIsAuthenticated: () => {},
-  user: null,
-  setUser: () => {},
-  logout: async () => {},
-  loading: false,
-  checkAuth: async () => {},
-};
-
-// 2. Context ma direct default state pass gareko (undefined ko jatha)
-const AuthContext = createContext<AuthContextProps>(defaultAuth);
-
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // Provider hatayeko le yo component le kehi pani wrap gardaina, direct children return garcha
-  return <>{children}</>;
-};
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<AuthUser>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const checkAuth = useCallback(async () => {
+    try {
+      const token = await getTokenCookie();
+      const storedUser = await getUserData();
+      setUser(storedUser as AuthUser);
+      setIsAuthenticated(!!token);
+    } catch {
+      setIsAuthenticated(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-// 3. Provider check garne part hatyo, direct context return huncha
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void checkAuth();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [checkAuth]);
+
+  const logout = async () => {
+    try {
+      await clearAuthCookies();
+      setIsAuthenticated(false);
+      setUser(null);
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        user,
+        setUser,
+        logout,
+        loading,
+        checkAuth,
+      }}
+    >
+      {children}
+      <ToastContainer position="top-center" autoClose={3000} />
+    </AuthContext.Provider>
+  );
+};
 export const useAuth = () => {
   const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
   return context;
 };
