@@ -1,38 +1,3 @@
-// "use client";
-// import { useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { LoginFormData, loginSchema } from "./schema";
-
-// interface LoginFormZodProps {
-//   action: (
-//     data: LoginFormData,
-//   ) => Promise<{ success: boolean; message: string }>;
-// }
-
-// export default function LoginFormZod({ action }: LoginFormZodProps) {
-//   const [submissionError, setSubmissionError] = useState<string | null>(null);
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors, isSubmitting },
-//   } = useForm<LoginFormData>({
-//     resolver: zodResolver(loginSchema),
-//     defaultValues: {
-//       email: "",
-//       password: "",
-//     },
-//   });
-
-//   const onSubmit = async (data: LoginFormData) => {
-//     const result = await action(data);
-//     if (result.success) {
-//       setSubmissionError(null);
-//       alert("Login successful");
-//     } else {
-//       setSubmissionError(result.message);
-//     }
-//   };
 "use client";
 
 import { useState } from "react";

@@ -9,7 +9,7 @@ export default function DashboardHeader() {
   return (
     <div className="flex flex-col gap-4 border-b border-stone-200 pb-6 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-stone-900">User Dashboard</h1>
+        <h1 className="text-3xl font-bold text-stone-900"> Dashboard</h1>
         <p className="mt-1 text-sm text-stone-500">
           Manage your handicraft products and orders
         </p>
@@ -37,7 +37,7 @@ export default function DashboardHeader() {
           href="/dashboard/orders"
           className="text-sm font-medium text-stone-600 hover:text-amber-700"
         >
-          Orders
+          PasswordUpdate
         </Link>
 
         <Link
