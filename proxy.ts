@@ -1,18 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getUserData } from "./lib/cookies";
 
 const publicRoutes = ["/login", "/register"];
-const protectedRoutes = ["/dashboard", "/admin"];
+const adminRoutes = ["/admin"];
 
 const startsWithRoute = (pathname: string, routes: string[]) =>
-  routes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  routes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("authToken")?.value;
+  const user = await getUserData();
   const isPublicRoute = startsWithRoute(pathname, publicRoutes);
-  const isProtectedRoute = startsWithRoute(pathname, protectedRoutes);
+  const isAdminRoute = startsWithRoute(pathname, adminRoutes);
 
-  if (!token && isProtectedRoute) {
+  if (!token && !isPublicRoute) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
@@ -20,6 +24,11 @@ export function proxy(request: NextRequest) {
 
   if (token && isPublicRoute) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+  if (token && user) {
+    if (isAdminRoute && user.role !== "admin") {
+      return NextResponse.redirect(new URL("/unauthoeized", request.url));
+    }
   }
 
   return NextResponse.next();
