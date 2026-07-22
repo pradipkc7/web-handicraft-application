@@ -101,6 +101,30 @@ export const updatePassword = async (data: unknown) => {
     throw new Error(getErrorMessage(error, "Failed to update password"));
   }
 };
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await axiosInstance.post(API.AUTH.FORGOT_PASSWORD, {
+      email,
+    });
+    return response.data; // reponse ko body
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, "Failed to send reset code"));
+  }
+};
+
+export const resetPassword = async (data: {
+  email: string;
+  code: string;
+  newPassword: string;
+}) => {
+  try {
+    const response = await axiosInstance.post(API.AUTH.RESET_PASSWORD, data);
+    return response.data; // reponse ko body
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, "Failed to reset password"));
+  }
+};
+
 export const whoami = async () => {
   try {
     const response = await axiosInstance.get(API.AUTH.WHOAMI);
