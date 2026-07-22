@@ -5,6 +5,8 @@ import {
   updatePassword,
   updateProfile,
   whoami,
+  forgotPassword,
+  resetPassword,
 } from "@/lib/api/auth";
 
 import {
@@ -120,6 +122,48 @@ export const handleUpdatePassword = async (data: UpdatePasswordFormData) => {
     return {
       success: false,
       message: getActionErrorMessage(error, "Failed to update password"),
+    };
+  }
+};
+
+export const handleForgotPassword = async (email: string) => {
+  try {
+    const result = await forgotPassword(email);
+    if (result.success) {
+      return { success: true, message: result.message };
+    } else {
+      return {
+        success: false,
+        message: result.message || "Failed to send reset code",
+      };
+    }
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Failed to send reset code"),
+    };
+  }
+};
+
+export const handleResetPassword = async (data: {
+  email: string;
+  code: string;
+  newPassword: string;
+}) => {
+  try {
+    const result = await resetPassword(data);
+    if (result.success) {
+      return { success: true, message: result.message };
+    } else {
+      return {
+        success: false,
+        message: result.message || "Failed to reset password",
+      };
+    }
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: getActionErrorMessage(error, "Failed to reset password"),
     };
   }
 };

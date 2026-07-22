@@ -27,7 +27,7 @@ export async function proxy(request: NextRequest) {
   }
   if (token && user) {
     if (isAdminRoute && user.role !== "admin") {
-      return NextResponse.redirect(new URL("/unauthoeized", request.url));
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }
 
@@ -35,5 +35,11 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/register"],
+  matcher: [
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/checkout/:path*",
+    "/login",
+    "/register",
+  ],
 };
