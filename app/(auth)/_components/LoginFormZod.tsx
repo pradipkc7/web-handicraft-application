@@ -85,7 +85,10 @@ export default function LoginFormZod({ action }: LoginFormZodProps) {
           />
           Remember me
         </label>
-        <a href="#" className="font-medium text-amber-900 hover:underline">
+        <a
+          href="/forgot-password"
+          className="font-medium text-amber-900 hover:underline"
+        >
           Forgot password?
         </a>
       </div>
