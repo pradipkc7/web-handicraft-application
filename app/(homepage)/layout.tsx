@@ -1,5 +1,6 @@
 import Footer from "../_components/Footer";
 import Navbar from "../_components/Navbar";
+import ChatWidget from "../_components/ChatWidget";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       <div className="mx-auto w-full max-w-[1440px] flex-1">{children}</div>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
